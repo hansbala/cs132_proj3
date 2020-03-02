@@ -1,0 +1,25 @@
+export default {
+    props: {
+        'tweetID': String,
+        'profilePhotoLink': String,
+        'profileImageAltText': String,
+        'realLifeName': String,
+        'userHandle': String,
+        'timeStamp': String,
+        'tweetContent': String,
+        // Stores whether the tweet has been fetched from the API or not
+        'fetchedTweet': Boolean,  
+    },
+    template: `
+    <div class="tweet">
+        <img :src="profilePhotoLink" alt="profileImageAltText" class="person-avatar">
+        <div class="tweet-info">
+            <p class="tweet-header">
+                <span class="user-info">{{realLifeName}} @{{userHandle}}</span> 
+                <span class="time-stamp">{{timeStamp}}</span>
+            </p>
+            <p class="tweet-content">{{tweetContent}}</p>
+        </div>
+    </div>
+    `,
+}
