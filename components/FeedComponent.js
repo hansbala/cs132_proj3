@@ -5,7 +5,7 @@ export default {
         return {
             // Linked as if in index.html
             penguinProfilePhotoLink: './assets/img/penguin.png',
-            fetch_url: 'http://ec2-54-172-96-100.compute-1.amazonaws.com/feed/random?q=noodle',
+            fetch_url: 'http://ec2-54-172-96-100.compute-1.amazonaws.com/feed/random?q=noodle&size=100',
             masterIDs: null,
             displayedIDs: null,
             masterTweets: [],
@@ -31,25 +31,78 @@ export default {
                 .then(data => {
                     // Update all ids of the tweets fetched and put them
                     // into the masterTweetList
-                    console.log(data.statuses);
-                    // this.updateMasterTweetList(data.statuses);
+                    this.updateMasterTweetList(data.statuses);
+                    // Sort by timestamp
+                    this.masterTweets = this.sortTweetList(this.masterTweets);
+                    for (let i = 0; i < this.masterTweets.length; i++) {
+                        console.log(this.masterTweets[i].timeStamp);
+                    }
                 })
                 .catch(err => {
                     // Encountered an error in fetching the tweets
                     console.log(err);
                 })
         },
+        // Sort the tweet list by timestamp
         sortTweetList(tweetList) {
-
+            console.log("in tweet list...");
+            tweetList.sort((tweet1, tweet2) =>
+                moment(tweet2.timeStamp.toString()).format('YYYYMMDD') -
+                moment(tweet1.timeStamp.toString()).format('YYYYMMDD'));
+            console.log(tweetList);
+            return tweetList;
         },
         updateDisplayTweets(tweetList) {
-
+            // Clear out the DOM
+            this.clearAllTweets();
+            // Sort the tweets
+            tweetList = this.sortTweetList(tweetList);
+            return tweetList;
         },
-        createNewTweet(tweetContent, tweetCreatedTime) {
-
+        clearAllTweets() {
+            let tweetContainer = document.getElementById('mainLink');
+            // While the tweet container has a child, remove that child
+            while (tweetContainer.firstChild) {
+                tweetContainer.removeChild(tweetContainer.firstChild);
+            }
         },
-        updateMasterTweetList(data) {
-
+        // Checks whether the image exists on the image url provided 
+        // @param {imageUrl} A string of the url where the image supposedly exists
+        // @return {Boolean} A true/false value indicating whether or not the image exists there
+        imageExists(imageUrl) {
+            var http = new XMLHttpRequest();
+            http.open('HEAD', imageUrl, false);
+            http.send();
+            // Return if the image exists on the server
+            return http.status != 404;
+        },
+        updateMasterTweetList(tweetList) {
+            for (let idx = 0; idx < tweetList.length; idx++) {
+                if (!this.masterIDs.has(tweetList[idx].id)) {
+                    // Add the tweet to the master ids set
+                    this.masterIDs.add(tweetList[idx].id);
+                    // Also add it to the masterTweets list
+                    let profile_img_url = tweetList[idx].user.profile_image_url_https.toString();
+                    if (!this.imageExists(profile_img_url)) {
+                        profile_img_url = './assets/img/no_photo.png';
+                    }
+                    let tweet_id = tweetList[idx].id;
+                    let realLifeName = tweetList[idx].user.name;
+                    let userHandle = tweetList[idx].user.screen_name;
+                    let timeStamp = tweetList[idx].created_at;
+                    let tweetContent = tweetList[idx].text;
+                    this.masterTweets.push({
+                        tweet_id,
+                        profile_img_url,
+                        tweetContent,
+                        realLifeName,
+                        userHandle,
+                        timeStamp,
+                        fetched: true,
+                    });
+                }
+            }
+            // console.log(this.masterTweets);
         },
 
     },
@@ -57,28 +110,17 @@ export default {
     <div class="content-wrapper">
         <div class="content-center" id="mainLink" role="main">
             <tweet-component
-                :key="12345"
-                tweetID="12345"
-                profilePhotoLink="./assets/img/penguin.png"
-                profileImageAltText="Penguin"
-                realLifeName="Penguin"
-                userHandle="penguin"
-                timeStamp="Nov 19"
-                tweetContent="I'm taking this class called CS132 and the TAs are so cool"
-            />
-            <tweet-component
-                :key="2456"
-                tweetID="2456"
-                profilePhotoLink="./assets/img/penguin.png"
-                profileImageAltText="Penguin"
-                realLifeName="Penguin"
-                userHandle="penguin"
-                timeStamp="Nov 19"
-                tweetContent="This is another test"
+                v-for="tweet in masterTweets"
+                :key=tweet.tweet_id
+                :profilePhotoLink=tweet.profile_img_url
+                :profileImageAltText=tweet.realLifeName
+                :realLifeName=tweet.realLifeName
+                :userHandle=tweet.userHandle
+                :tweetContent=tweet.tweetContent
+                :timeStamp=tweet.timeStamp
+                :fetchedTweet=tweet.fetched
             />
         </div>
     </div>
     `
 }
-
-// I'm taking this class called CS132 and the TAs are so cool

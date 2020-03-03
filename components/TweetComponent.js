@@ -10,6 +10,9 @@ export default {
         // Stores whether the tweet has been fetched from the API or not
         'fetchedTweet': Boolean,  
     },
+    created() {
+        
+    },
     template: `
     <div class="tweet">
         <img :src="profilePhotoLink" alt="profileImageAltText" class="person-avatar">
