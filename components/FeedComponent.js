@@ -1,4 +1,5 @@
 import TweetComponent from './TweetComponent.js';
+import { EventBus } from './EventBus.js';
 
 export default {
     data() {
@@ -15,6 +16,11 @@ export default {
     },
     components: {
         'tweet-component': TweetComponent,
+    },
+    mounted() {
+        EventBus.$on('create-tweet', function(tweetContent, timeStamp) {
+            // New user tweet creation
+        });
     },
     created() {
         // Initialize masterIDs and displayed IDs as new sets
@@ -77,30 +83,31 @@ export default {
                 this.fetchTweets();
             }
         },
+        // Adds a tweet to the master tweet list
+        addTweet(tweetID, realLifeName, userHandle, imageLink, timeStamp, tweetContent, fetched) {
+            this.masterTweets.push({
+                tweetID,
+                imageLink,
+                tweetContent,
+                realLifeName,
+                userHandle,
+                timeStamp,
+                fetched,
+            })
+        },
         updateMasterTweetList(tweetList) {
             for (let idx = 0; idx < tweetList.length; idx++) {
                 if (!this.masterIDs.has(tweetList[idx].id)) {
                     // Add the tweet to the master ids set
                     this.masterIDs.add(tweetList[idx].id);
                     // Also add it to the masterTweets list
-                    let profile_img_url = tweetList[idx].user.profile_image_url_https.toString();
-                    if (!this.imageExists(profile_img_url)) {
-                        profile_img_url = './assets/img/no_photo.png';
+                    let profileImgUrl = tweetList[idx].user.profile_image_url_https.toString();
+                    if (!this.imageExists(profileImgUrl)) {
+                        profileImgUrl = './assets/img/no_photo.png';
                     }
-                    let tweet_id = tweetList[idx].id;
-                    let realLifeName = tweetList[idx].user.name;
-                    let userHandle = tweetList[idx].user.screen_name;
-                    let timeStamp = tweetList[idx].created_at;
-                    let tweetContent = tweetList[idx].text;
-                    this.masterTweets.push({
-                        tweet_id,
-                        profile_img_url,
-                        tweetContent,
-                        realLifeName,
-                        userHandle,
-                        timeStamp,
-                        fetched: true,
-                    });
+                    this.addTweet(tweetList[idx].id, tweetList[idx].user.name, 
+                        tweetList[idx].user.screen_name, profileImgUrl, 
+                        tweetList[idx].created_at, tweetList[idx].text, true);
                 }
             }
         },
@@ -114,8 +121,8 @@ export default {
             role="main">
             <tweet-component
                 v-for="tweet in masterTweets"
-                :key=tweet.tweet_id
-                :profilePhotoLink=tweet.profile_img_url
+                :key=tweet.tweetID
+                :profilePhotoLink=tweet.imageLink
                 :profileImageAltText=tweet.realLifeName
                 :realLifeName=tweet.realLifeName
                 :userHandle=tweet.userHandle

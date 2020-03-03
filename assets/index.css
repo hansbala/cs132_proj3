@@ -137,7 +137,19 @@ a#skip-main:focus {
   align-items: center;
   margin-top: 100px;
   width: 100%;
+}
+.write-area-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#write-tweet-area {
+  border: none;
+  width: 100%;
+  resize: none;
+  font-size: 16px;
   max-width: 1190px;
+  margin: 0px 20px;
 }
 .submit-btn-area {
   width: 100%;
@@ -156,11 +168,7 @@ a#skip-main:focus {
   background-color: var(--twitter-blue-clr);
   color: white;
   font-weight: bold;
-}
-textarea {
-  border: none;
-  width: 100%;
-  resize: none;
+  margin-right: 10px;
 }
 
 /* Body styling */

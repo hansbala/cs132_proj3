@@ -1,9 +1,39 @@
+import { EventBus } from './EventBus.js';
+
 export default {
+    data() {
+        return {
+            newTweetContent: '',
+        }
+    },
+    methods: {
+        createNewTweet() {
+            // Log the tweet content to the console
+            console.log(this.newTweetContent);
+            // Emit a 'create-tweet' emission to the app to trigger a new tweet
+            // Also send the timestamp of the created tweet
+            let nowTime = moment().format();
+            EventBus.$emit('create-tweet', this.newTweetContent, nowTime);
+            // Reset the newTweetContent to '' to empty out the text area
+            this.newTweetContent = '';
+        }
+    },
     template: `
     <div class="new-tweet-area">
-        <textarea id="write-tweet-area" rows="7" cols="40" placeholder="Write a new tweet here..."></textarea>
+        <div class="write-area-wrapper">
+            <textarea 
+                id="write-tweet-area" 
+                v-model="newTweetContent"
+                rows="7" 
+                placeholder="Write a new tweet here...">
+                </textarea>
+        </div>
         <div class="submit-btn-area">
-            <button id="submit-btn"> Tweet </button>
+            <button 
+                @click="createNewTweet()"
+                id="submit-btn"> 
+                Tweet 
+            </button>
         </div>
     </div>
     `
