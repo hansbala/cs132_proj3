@@ -4,8 +4,6 @@ import { EventBus } from './EventBus.js';
 export default {
     data() {
         return {
-            // Linked as if in index.html
-            penguinProfilePhotoLink: './assets/img/penguin.png',
             // Get >= 25 tweets to implement lazy loading
             fetch_url: 'http://ec2-54-172-96-100.compute-1.amazonaws.com/feed/random?q=noodle&size=5',
             masterIDs: null,
@@ -17,18 +15,9 @@ export default {
         'tweet-component': TweetComponent,
     },
     mounted: function() {
-        EventBus.$on('create-tweet', function(tweetContent, timeStamp) {
-            // New user tweet creation
-            let unique_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-            console.log(unique_id);
-            this.addTweet(unique_id, 'Penguin', 'giant_penguin', 
-                './assets/img/penguin.png', timeStamp, tweetContent, false);
-        });
+        EventBus.$on('create-tweet', this.addUserTweet);
     },
-    created() {
+    created: function() {
         // Initialize masterIDs and displayed IDs as new sets
         this.masterIDs = new Set();
         this.fetchTweets();
@@ -52,6 +41,23 @@ export default {
                     console.log(err);
                 })
         },
+        updateMasterTweetList(tweetList) {
+            for (let idx = 0; idx < tweetList.length; idx++) {
+                if (!this.masterIDs.has(tweetList[idx].id)) {
+                    // Add the tweet to the master ids set
+                    this.masterIDs.add(tweetList[idx].id);
+                    // Also add it to the masterTweets list
+                    let profileImgUrl = tweetList[idx].user.profile_image_url_https.toString();
+                    if (!this.imageExists(profileImgUrl)) {
+                        profileImgUrl = './assets/img/no_photo.png';
+                    }
+                    // Call the wrapper to add a tweet to the masterTweets
+                    this.addTweet(tweetList[idx].id, tweetList[idx].user.name, 
+                        tweetList[idx].user.screen_name, profileImgUrl, 
+                        tweetList[idx].created_at, tweetList[idx].text, true);
+                }
+            }
+        },
         // Sort the tweet list by timestamp
         sortTweetList(tweetList) {
             tweetList.sort((tweet1, tweet2) =>
@@ -65,6 +71,7 @@ export default {
             tweetList = this.sortTweetList(tweetList);
             return tweetList;
         },
+        // Clear out all the tweets from the DOM
         clearAllTweets() {
             let tweetContainer = document.getElementById('mainLink');
             // While the tweet container has a child, remove that child
@@ -82,6 +89,7 @@ export default {
             // Return if the image exists on the server
             return http.status != 404;
         },
+        // Implement lazy scrolling
         feedScrolled() {
             // Refresh the feed lazily once we scroll to bottom but make sure search filtering is off
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !this.searchOn) {
@@ -100,21 +108,16 @@ export default {
                 fetched,
             })
         },
-        updateMasterTweetList(tweetList) {
-            for (let idx = 0; idx < tweetList.length; idx++) {
-                if (!this.masterIDs.has(tweetList[idx].id)) {
-                    // Add the tweet to the master ids set
-                    this.masterIDs.add(tweetList[idx].id);
-                    // Also add it to the masterTweets list
-                    let profileImgUrl = tweetList[idx].user.profile_image_url_https.toString();
-                    if (!this.imageExists(profileImgUrl)) {
-                        profileImgUrl = './assets/img/no_photo.png';
-                    }
-                    this.addTweet(tweetList[idx].id, tweetList[idx].user.name, 
-                        tweetList[idx].user.screen_name, profileImgUrl, 
-                        tweetList[idx].created_at, tweetList[idx].text, true);
-                }
-            }
+        // Wrapper funcvtion called by the event bus to add a user tweet to the master list
+        addUserTweet(tweetContent, timeStamp) {
+            // Add the tweet to the master list
+            let uid = this.uuidv4();
+            this.addTweet(uid, 'Penguin', 'giant_penguin', 
+                './assets/img/penguin.png', timeStamp, tweetContent, false);
+            // Add to the master IDs set
+            this.masterIDs.add(uid);
+            // Sort the masterTweet list
+            this.masterTweets = this.sortTweetList(this.masterTweets);
         },
         // Generates random uuids when called
         // Reference: https://stackoverflow.com/a/2117523

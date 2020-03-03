@@ -8,8 +8,6 @@ export default {
     },
     methods: {
         createNewTweet() {
-            // Log the tweet content to the console
-            console.log(this.newTweetContent);
             // Emit a 'create-tweet' emission to the app to trigger a new tweet
             // Also send the timestamp of the created tweet
             let nowTime = moment().format();
