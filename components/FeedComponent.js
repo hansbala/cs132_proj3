@@ -102,7 +102,6 @@ export default {
                     });
                 }
             }
-            // console.log(this.masterTweets);
         },
 
     },
