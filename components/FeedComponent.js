@@ -10,6 +10,7 @@ export default {
             masterTweets: [],
             displayTweets: [],
             searchOn: false,
+            allowFetch: true,
         }
     },
     components: {
@@ -97,7 +98,13 @@ export default {
         feedScrolled() {
             // Refresh the feed lazily once we scroll to bottom but make sure search filtering is off
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !this.searchOn) {
-                this.fetchTweets();
+                if (this.allowFetch) {
+                    this.fetchTweets();
+                    this.allowFetch = false;
+                }
+                window.setTimeout(() => {
+                    this.allowFetch = true;
+                }, 3000);
             }
         },
         // Adds a tweet to the master tweet list
