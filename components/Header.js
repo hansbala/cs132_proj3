@@ -13,7 +13,7 @@ export default {
                     <router-link to="/tic-tac-toe"> TicTacToe </router-link>
                 </li>
                 <li class="navbar-link">
-                    <router-link to="/tic-tac-toe"> TicTacToe </router-link>
+                    <router-link to="/Madlibs"> Madlibs </router-link>
                 </li>
                 <li class="navbar-link"><a href="#"></a>Notifications</li>
                 <li class="navbar-link"><a href="#"></a>Messages</li>
