@@ -9,8 +9,12 @@ export default {
     <header class="page-header">
         <div class="header-content-wrapper">
             <nav class="navbar">
-                <li class="navbar-link"><a href="#"></a>Home</li>
-                <li class="navbar-link"><a href="#"></a>Moments</li>
+                <li class="navbar-link">
+                    <router-link to="/tic-tac-toe"> TicTacToe </router-link>
+                </li>
+                <li class="navbar-link">
+                    <router-link to="/tic-tac-toe"> TicTacToe </router-link>
+                </li>
                 <li class="navbar-link"><a href="#"></a>Notifications</li>
                 <li class="navbar-link"><a href="#"></a>Messages</li>
             </nav>
@@ -24,3 +28,6 @@ export default {
     </header>
     `,
 };
+
+{/* <li class="navbar-link"><a href="#"></a>Home</li>
+<li class="navbar-link"><a href="#"></a>Moments</li> */}

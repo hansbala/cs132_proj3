@@ -2,11 +2,11 @@ import HeaderComponent from './Header.js';
 import FeedComponent from './FeedComponent.js';
 import CreateTweetComponent from './CreateTweet.js';
 import SearchComponent from './Search.js';
-import Router from './Router.js';
+// import Router from './Router.js';
 
 const app = new Vue({
     el: '#app',
-    router: Router,
+    // router: Router,
     components: {
         'header-component': HeaderComponent,
         'feed-component': FeedComponent,
