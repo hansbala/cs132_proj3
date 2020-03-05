@@ -1,4 +1,3 @@
-// import HeaderComponent from './Header.js';
 import FeedComponent from './FeedComponent.js';
 import CreateTweetComponent from './CreateTweet.js';
 import SearchComponent from './Search.js';
@@ -9,16 +8,15 @@ import HeaderComponent from './Header.js';
 const routes = [
     { path: '/tictactoe', component: TicTacToe },
     { path: '/madlibs', component: MadLibComponent },
-]
+];
 const router = new VueRouter({
     routes
-})
+});
 
-const app = new Vue({
+new Vue({
     el: '#app',
     router,
     components: {
-        // 'header-component': HeaderComponent,
         'feed-component': FeedComponent,
         'create-tweet-component': CreateTweetComponent,
         'search-component': SearchComponent,

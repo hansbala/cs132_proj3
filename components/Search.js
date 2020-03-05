@@ -1,10 +1,10 @@
-import { EventBus } from "./EventBus.js";
+import { EventBus } from './EventBus.js';
 
 export default {
     data() {
         return {
             searchQuery: '',
-        }
+        };
     },
     watch: {
         searchQuery(query) {
@@ -21,4 +21,4 @@ export default {
             placeholder="Type to filter tweets ...">
     </div>
     `
-}
+};

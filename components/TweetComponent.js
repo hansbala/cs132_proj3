@@ -13,7 +13,7 @@ export default {
     data() {
         return {
             localTimeStamp: null,
-        }
+        };
     },
     created() {
         this.localTimeStamp = moment(this.timeStamp).format('MMM Do, YYYY hh:mm A');
@@ -32,4 +32,4 @@ export default {
         </div>
     </div>
     `,
-}
+};

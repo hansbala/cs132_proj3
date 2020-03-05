@@ -84,15 +84,14 @@ Vue.component('game-board', {
         },
 
         playerMove(r,c) {
-            let cell_id = ((r - 1) * 3 + c) + "";
-            if (document.getElementById(cell_id).innerHTML != "") {
-                console.log("This cell is empty");
+            let cell_id = ((r - 1) * 3 + c) + '';
+            if (document.getElementById(cell_id).innerHTML != '') {
                 // Do not do anything if the cell is occupied
                 return;
             }
             // Check if there is a winner. If there is one, then simply return and print a message
             if (this.winner != null) {
-                console.log(this.winner + " has already won the game.");
+                console.log(this.winner + ' has already won the game.');
                 return;
             }
             this.currentPlayer = (this.currentPlayer == this.X ? this.O : this.X);
@@ -113,9 +112,9 @@ Vue.component('game-board', {
                 [2, 4, 6]
             ];
             winningCombos.forEach(combo => {
-                const first_id = (parseInt(combo[0]) + 1) + "";
-                const sec_id = (parseInt(combo[1]) + 1) + "";
-                const third_id = (parseInt(combo[2]) + 1) + "";                
+                const first_id = (parseInt(combo[0]) + 1) + '';
+                const sec_id = (parseInt(combo[1]) + 1) + '';
+                const third_id = (parseInt(combo[2]) + 1) + '';                
                 
                 // Check if all the ids in first, sec, and third are all the same
                 let idx_1 = document.getElementById(first_id).innerHTML;
@@ -123,10 +122,10 @@ Vue.component('game-board', {
                 let idx_3 = document.getElementById(third_id).innerHTML;
                 if (idx_1 != '' && idx_2 != '' && idx_3 != '' && idx_1 == idx_2 && idx_2 == idx_3) {
                     this.winner = this.currentPlayer == this.X ? 'Alice' : 'Bob';
-                    console.log(this.winner + " has won the game");
+                    console.log(this.winner + ' has won the game');
                 }
             });
-          },
+        },
     },
     template: `
         <div id="board" :class="classObject" :style="styleObject">
@@ -150,7 +149,7 @@ export default {
             playerNames: [],
             appClasses: ['w-100', 'h-100', 'p-5', 'd-flex', 'flex-column', 'align-items-center'],
             playerReady: {}
-        }
+        };
     },
     methods: {
         onPlayerReady(playerName, isReady) {
@@ -168,7 +167,7 @@ export default {
         bothPlayerReady() {
             return this.playerNames.length && 
                 this.playerNames.map(playerName => this.playerReady[playerName])
-                                .reduce((prevValue, currValue) => prevValue && currValue);
+                    .reduce((prevValue, currValue) => prevValue && currValue);
         }
     },
     template: `

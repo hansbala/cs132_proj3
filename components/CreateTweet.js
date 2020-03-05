@@ -4,7 +4,7 @@ export default {
     data() {
         return {
             newTweetContent: '',
-        }
+        };
     },
     methods: {
         createNewTweet() {
@@ -35,4 +35,4 @@ export default {
         </div>
     </div>
     `
-}
+};

@@ -11,7 +11,7 @@ export default {
             displayTweets: [],
             searchOn: false,
             allowFetch: true,
-        }
+        };
     },
     components: {
         'tweet-component': TweetComponent,
@@ -30,7 +30,6 @@ export default {
         // Fetches new tweets and updates masterIDs, and masterTweets,
         // and also adds the tweets to the DOM
         fetchTweets() {
-            console.log("fetching tweets");
             fetch(this.fetch_url)
                 .then(res => res.json())
                 .then(data => {
@@ -44,7 +43,7 @@ export default {
                 .catch(err => {
                     // Encountered an error in fetching the tweets
                     console.log(err);
-                })
+                });
         },
         updateMasterTweetList(tweetList) {
             for (let idx = 0; idx < tweetList.length; idx++) {
@@ -117,7 +116,7 @@ export default {
                 userHandle,
                 timeStamp,
                 fetched,
-            })
+            });
         },
         // Wrapper funcvtion called by the event bus to add a user tweet to the master list
         addUserTweet(tweetContent, timeStamp) {
@@ -140,8 +139,8 @@ export default {
         // Reference: https://stackoverflow.com/a/2117523
         uuidv4() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-              return v.toString(16);
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
             });
         },
         handleSearch(searchQuery) {
@@ -201,4 +200,4 @@ export default {
         </div>
     </section>
     `
-}
+};

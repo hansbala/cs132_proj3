@@ -3,7 +3,7 @@ export default {
         return {
             // Linked as if placed in index.html
             twitterLogoLink: './assets/img/twitter-logo.png',
-        }
+        };
     },
     template: `
     <header class="page-header">
